@@ -7,6 +7,7 @@ import * as url from "../../shared/url";
 interface IChartVersionsListProps {
   selected: IChartVersion;
   versions: IChartVersion[];
+  ns?: string;
 }
 
 interface IChartVersionsListState {
@@ -20,14 +21,21 @@ class ChartVersionsList extends React.Component<IChartVersionsListProps, IChartV
 
   public render() {
     const versions = this.state.showAll ? this.props.versions : this.props.versions.slice(0, 5);
+    const ns = this.props.ns;
+
     const items = versions.map(v => {
       const selectedClass =
         this.props.selected.attributes.version === v.attributes.version
           ? "type-bold type-color-action"
           : "";
+
+      const chartVersionPage = ns
+        ? `/ns/${ns}` + url.app.charts.version(v)
+        : url.app.charts.version(v);
+
       return (
         <li key={v.id}>
-          <Link className={selectedClass} to={url.app.charts.version(v)}>
+          <Link className={selectedClass} to={chartVersionPage}>
             {v.attributes.version} - {this.formatDate(v.attributes.created)}
           </Link>
         </li>

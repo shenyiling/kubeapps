@@ -1,0 +1,531 @@
+allowNamespaceDiscovery: true
+apprepository:
+  affinity: {}
+  image:
+    registry: 192.168.8.193:5000
+    repository: dev/bitnami/kubeapps-apprepository-controller
+    tag: 1.9.2-scratch-r0
+  initialRepos:
+  - name: stable
+    url: http://192.168.8.218:5010
+  initialReposProxy:
+    enabled: false
+  nodeSelector: {}
+  replicaCount: 1
+  resources:
+    limits:
+      cpu: 250m
+      memory: 128Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
+  syncImage:
+    registry: 192.168.8.193:5000
+    repository: dev/bitnami/kubeapps-asset-syncer
+    tag: 1.9.2-scratch-r0
+  tolerations: {}
+assetsvc:
+  affinity: {}
+  image:
+    registry: 192.168.8.193:5000
+    repository: dev/bitnami/kubeapps-assetsvc
+    tag: 1.9.2-scratch-r0
+  livenessProbe:
+    httpGet:
+      path: /live
+      port: 8080
+    initialDelaySeconds: 60
+    timeoutSeconds: 5
+  nodeSelector: {}
+  readinessProbe:
+    httpGet:
+      path: /ready
+      port: 8080
+    initialDelaySeconds: 0
+    timeoutSeconds: 5
+  replicaCount: 2
+  resources:
+    limits:
+      cpu: 250m
+      memory: 128Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
+  service:
+    port: 8080
+  tolerations: {}
+authProxy:
+  additionalFlags: []
+  clientID: ""
+  clientSecret: ""
+  cookieSecret: ""
+  emailDomain: '*'
+  enabled: false
+  image:
+    registry: 192.168.8.193:5000
+    repository: dev/bitnami/oauth2-proxy
+    tag: 5.0.0-debian-10-r19
+  provider: ""
+  resources:
+    limits:
+      cpu: 250m
+      memory: 128Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
+dashboard:
+  affinity: {}
+  image:
+    registry: 192.168.8.193:5000
+    repository: dev/bitnami/kubeapps-dashboard
+    tag: 1.9.2-debian-10-r0
+  livenessProbe:
+    httpGet:
+      path: /
+      port: 8080
+    initialDelaySeconds: 60
+    timeoutSeconds: 5
+  nodeSelector: {}
+  readinessProbe:
+    httpGet:
+      path: /
+      port: 8080
+    initialDelaySeconds: 0
+    timeoutSeconds: 5
+  replicaCount: 2
+  resources:
+    limits:
+      cpu: 250m
+      memory: 128Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
+  service:
+    port: 8080
+  tolerations: {}
+featureFlags:
+  invalidateCache: true
+  operators: false
+  reposPerNamespace: false
+frontend:
+  affinity: {}
+  image:
+    registry: 192.168.8.193:5000
+    repository: dev/bitnami/nginx
+    tag: 1.16.1-debian-10-r42
+  livenessProbe:
+    httpGet:
+      path: /healthz
+      port: 8080
+    initialDelaySeconds: 60
+    timeoutSeconds: 5
+  nodeSelector: {}
+  proxypassAccessTokenAsBearer: false
+  readinessProbe:
+    httpGet:
+      path: /
+      port: 8080
+    initialDelaySeconds: 0
+    timeoutSeconds: 5
+  replicaCount: 2
+  resources:
+    limits:
+      cpu: 250m
+      memory: 128Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
+  service:
+    annotations: {}
+    port: 80
+    type: ClusterIP
+  tolerations: {}
+hooks:
+  affinity: {}
+  image:
+    registry: 192.168.8.193:5000
+    repository: dev/bitnami/kubectl
+    tag: 1.16.3-debian-10-r40
+  nodeSelector: {}
+  tolerations: {}
+ingress:
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+  certManager: false
+  enabled: false
+  hostname: kubeapps.local
+  secrets: []
+  tls: false
+kubeops:
+  affinity: {}
+  image:
+    registry: 192.168.8.193:5000
+    repository: dev/bitnami/kubeapps-kubeops
+    tag: 1.9.2-scratch-r0
+  livenessProbe:
+    httpGet:
+      path: /live
+      port: 8080
+    initialDelaySeconds: 60
+    timeoutSeconds: 5
+  nodeSelector: {}
+  readinessProbe:
+    httpGet:
+      path: /ready
+      port: 8080
+    initialDelaySeconds: 0
+    timeoutSeconds: 5
+  replicaCount: 2
+  resources:
+    limits:
+      cpu: 250m
+      memory: 256Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
+  service:
+    port: 8080
+  tolerations: []
+mongodb:
+  affinity: {}
+  affinityArbiter: {}
+  annotations: {}
+  clusterDomain: cluster.local
+  enabled: true
+  existingSecret: kubeapps-mongodb
+  extraVolumeMounts: []
+  extraVolumeMountsArbiter: []
+  extraVolumes: []
+  extraVolumesArbiter: []
+  global: {}
+  image:
+    debug: false
+    pullPolicy: IfNotPresent
+    registry: 192.168.8.193:5000
+    repository: dev/bitnami/mongodb
+    tag: 4.2.5-debian-10-r44
+  ingress:
+    annotations: null
+    certManager: false
+    enabled: false
+    hosts:
+    - name: mongodb.local
+      path: /
+    secrets: null
+    tls:
+    - hosts:
+      - mongodb.local
+      secretName: mongodb.local-tls
+  initConfigMap: {}
+  labels: {}
+  livenessProbe:
+    enabled: true
+    failureThreshold: 6
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  metrics:
+    enabled: false
+    extraArgs: ""
+    image:
+      pullPolicy: IfNotPresent
+      registry: 192.168.8.193:5000
+      repository: dev/bitnami/mongodb-exporter
+      tag: 0.10.0-debian-10-r69
+    livenessProbe:
+      enabled: false
+      failureThreshold: 3
+      initialDelaySeconds: 15
+      periodSeconds: 5
+      successThreshold: 1
+      timeoutSeconds: 5
+    podAnnotations:
+      prometheus.io/port: "9216"
+      prometheus.io/scrape: "true"
+    readinessProbe:
+      enabled: false
+      failureThreshold: 3
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      successThreshold: 1
+      timeoutSeconds: 1
+    serviceMonitor:
+      additionalLabels: {}
+      alerting:
+        additionalLabels: {}
+        rules: {}
+      enabled: false
+  mongodbDirectoryPerDB: false
+  mongodbDisableSystemLog: false
+  mongodbEnableIPv6: false
+  mongodbExtraFlags: []
+  mongodbSystemLogVerbosity: 0
+  nodeSelector: {}
+  persistence:
+    accessModes:
+    - ReadWriteOnce
+    annotations: {}
+    enabled: false
+    mountPath: /bitnami/mongodb
+    size: 8Gi
+    subPath: ""
+  podAnnotations: {}
+  podLabels: {}
+  readinessProbe:
+    enabled: true
+    failureThreshold: 6
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  replicaSet:
+    enabled: false
+    name: rs0
+    pdb:
+      enabled: true
+      minAvailable:
+        arbiter: 1
+        primary: 1
+        secondary: 1
+    replicas:
+      arbiter: 1
+      secondary: 1
+    useHostnames: true
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 50m
+      memory: 256Mi
+  resourcesArbiter: {}
+  securityContext:
+    enabled: false
+    fsGroup: 1001
+    runAsUser: 1001
+  service:
+    annotations: {}
+    port: 27017
+    type: ClusterIP
+  serviceAccount:
+    create: true
+    name: null
+  sidecars: []
+  sidecarsArbiter: []
+  tolerations: []
+  updateStrategy:
+    type: RollingUpdate
+  usePassword: true
+  useStatefulSet: false
+  volumePermissions:
+    enabled: false
+    image:
+      pullPolicy: Always
+      registry: 192.168.8.193:5000
+      repository: dev/bitnami/minideb
+      tag: buster
+    resources: {}
+postgresql:
+  enabled: false
+  existingSecret: kubeapps-db
+  extraEnv: []
+  global:
+    postgresql: {}
+  image:
+    debug: false
+    pullPolicy: IfNotPresent
+    registry: 192.168.8.193:5000
+    repository: dev/bitnami/postgresql
+    tag: 11.7.0-debian-10-r65
+  ldap:
+    baseDN: ""
+    bind_password: null
+    bindDN: ""
+    enabled: false
+    port: ""
+    prefix: ""
+    scheme: ""
+    search_attr: ""
+    search_filter: ""
+    server: ""
+    suffix: ""
+    tls: false
+    url: ""
+  livenessProbe:
+    enabled: true
+    failureThreshold: 6
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  master:
+    affinity: {}
+    annotations: {}
+    extraInitContainers: []
+    extraVolumeMounts: []
+    extraVolumes: []
+    labels: {}
+    nodeSelector: {}
+    podAnnotations: {}
+    podLabels: {}
+    priorityClassName: ""
+    service: {}
+    sidecars: []
+    tolerations: []
+  metrics:
+    enabled: false
+    image:
+      pullPolicy: IfNotPresent
+      registry: 192.168.8.193:5000
+      repository: dev/bitnami/postgres-exporter
+      tag: 0.8.0-debian-10-r72
+    livenessProbe:
+      enabled: true
+      failureThreshold: 6
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+    prometheusRule:
+      additionalLabels: {}
+      enabled: false
+      namespace: ""
+      rules: []
+    readinessProbe:
+      enabled: true
+      failureThreshold: 6
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+    securityContext:
+      enabled: false
+      runAsUser: 1001
+    service:
+      annotations:
+        prometheus.io/port: "9187"
+        prometheus.io/scrape: "true"
+      loadBalancerIP: null
+      type: ClusterIP
+    serviceMonitor:
+      additionalLabels: {}
+      enabled: false
+  networkPolicy:
+    allowExternal: true
+    enabled: false
+    explicitNamespacesSelector: {}
+  persistence:
+    accessModes:
+    - ReadWriteOnce
+    annotations: {}
+    enabled: false
+    mountPath: /bitnami/postgresql
+    size: 8Gi
+    subPath: ""
+  postgresqlDataDir: /bitnami/postgresql/data
+  postgresqlDatabase: assets
+  postgresqlUsername: postgres
+  readinessProbe:
+    enabled: true
+    failureThreshold: 6
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  replication:
+    applicationName: my_application
+    enabled: true
+    numSynchronousReplicas: 0
+    password: repl_password
+    slaveReplicas: 1
+    synchronousCommit: "off"
+    user: repl_user
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+  securityContext:
+    enabled: false
+    fsGroup: 1001
+    runAsUser: 1001
+  service:
+    annotations: {}
+    port: 5432
+    type: ClusterIP
+  serviceAccount:
+    enabled: false
+  shmVolume:
+    chmod:
+      enabled: true
+    enabled: true
+  slave:
+    affinity: {}
+    annotations: {}
+    extraInitContainers: |
+      # - name: do-something
+      #   image: busybox
+      #   command: ['do', 'something']
+    extraVolumeMounts: []
+    extraVolumes: []
+    labels: {}
+    nodeSelector: {}
+    podAnnotations: {}
+    podLabels: {}
+    priorityClassName: ""
+    service: {}
+    sidecars: []
+    tolerations: []
+  updateStrategy:
+    type: RollingUpdate
+  volumePermissions:
+    enabled: false
+    image:
+      pullPolicy: Always
+      registry: 192.168.8.193:5000
+      repository: dev/bitnami/minideb
+      tag: buster
+    securityContext:
+      runAsUser: 0
+rbac:
+  create: true
+securityContext:
+  enabled: false
+  runAsUser: 1001
+testImage:
+  registry: 192.168.8.193:5000
+  repository: dev/bitnami/nginx
+  tag: 1.16.1-debian-10-r42
+tillerProxy:
+  affinity: {}
+  host: tiller-deploy.kube-system:44134
+  image:
+    registry: 192.168.8.193:5000
+    repository: dev/bitnami/kubeapps-tiller-proxy
+    tag: 1.9.2-scratch-r0
+  livenessProbe:
+    httpGet:
+      path: /live
+      port: 8080
+    initialDelaySeconds: 60
+    timeoutSeconds: 5
+  nodeSelector: {}
+  readinessProbe:
+    httpGet:
+      path: /ready
+      port: 8080
+    initialDelaySeconds: 0
+    timeoutSeconds: 5
+  replicaCount: 2
+  resources:
+    limits:
+      cpu: 250m
+      memory: 256Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
+  service:
+    port: 8080
+  tls: {}
+  tolerations: {}
+useHelm3: true
