@@ -146,13 +146,20 @@ class DeploymentFormBody extends React.Component<
     // forms behave differently. In the deployment form, a change in the version
     // changes the route but in the case of the upgrade it only changes the state
     const isUpgradeForm = !!this.props.releaseVersion;
+    const { chartID, chartNamespace, getChartVersion } = this.props;
+
+    const reg = /new\-from\-global/g;
+    const isGlobal = reg.test(window.location.href);
 
     if (isUpgradeForm) {
-      const { chartID, chartNamespace, getChartVersion } = this.props;
+      // TODO: 更新chart
       getChartVersion(chartNamespace, chartID, e.currentTarget.value);
     } else {
+      // TODO: 新建release
       this.props.push(
-        `/ns/${this.props.namespace}/apps/new/${this.props.chartID}/versions/${e.currentTarget.value}`,
+        `/ns/${this.props.namespace}/apps/${isGlobal ? "new-from-global" : "new"}/${
+          this.props.chartID
+        }/versions/${e.currentTarget.value}`,
       );
     }
   };
